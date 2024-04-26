@@ -25,7 +25,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserDto register(UserRegistrationRequestDto requestDto){
+    public UserDto register(UserRegistrationRequestDto requestDto) {
         if (userRepository.findByEmail(requestDto.getEmail()).isPresent()) {
             throw new RegistrationException("Provided email is already taken");
         }
@@ -34,7 +34,8 @@ public class UserServiceImpl implements UserService {
 
         Set<Role> roles = new HashSet<>();
         Role userRole = roleRepository.findByName(Role.RoleName.USER)
-                .orElseThrow(() -> new RuntimeException("Default USER role not found. Please check the database."));
+                .orElseThrow(() -> new RuntimeException(
+                        "Default USER role not found. Please check the database."));
         roles.add(userRole);
         user.setRoles(roles);
 

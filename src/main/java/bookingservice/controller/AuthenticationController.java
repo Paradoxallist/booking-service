@@ -1,9 +1,9 @@
 package bookingservice.controller;
 
-import bookingservice.dto.UserRegistrationRequestDto;
 import bookingservice.dto.UserDto;
 import bookingservice.dto.UserLoginRequestDto;
 import bookingservice.dto.UserLoginResponseDto;
+import bookingservice.dto.UserRegistrationRequestDto;
 import bookingservice.security.AuthenticationService;
 import bookingservice.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;

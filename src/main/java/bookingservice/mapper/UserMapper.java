@@ -1,8 +1,8 @@
 package bookingservice.mapper;
 
 import bookingservice.config.MapperConfig;
-import bookingservice.dto.UserRegistrationRequestDto;
 import bookingservice.dto.UserDto;
+import bookingservice.dto.UserRegistrationRequestDto;
 import bookingservice.model.User;
 import org.mapstruct.Mapper;
 
