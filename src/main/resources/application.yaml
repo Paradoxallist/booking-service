@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: booking-service
+  datasource:
+    url: jdbc:mysql://localhost:3306/booking_service
+    username: root
+    password: 1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: 'validate'
+    show-sql: true
+  jackson:
+    deserialization:
+      fail-on-unknown-properties: true
+server:
+  servlet:
+    context-path: /api
+  port: 8081
+jwt:
+  expiration: 123456789
+  secret: ultraMegaSuperSecretStringForJwtToken
