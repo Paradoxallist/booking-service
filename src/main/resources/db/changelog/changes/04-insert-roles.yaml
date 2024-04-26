@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-users
+      author: Yevhenii_Liashenko
+      changes:
+        - insert:
+            tableName: roles
+            columns:
+              - column:
+                  name: name
+                  value: "USER"
+        - insert:
+            tableName: roles
+            columns:
+              - column:
+                  name: name
+                  value: "ADMIN"
