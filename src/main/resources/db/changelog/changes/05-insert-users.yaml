@@ -1,0 +1,19 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-users
+      author: Yevhenii_Liashenko
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column: {name: email, value: "user@example.com"}
+              - column: {name: password, value: "$2a$10$/kmAejMiCs5tvKBD8aITd.uwyt/Aww38FlRVuQQ93/.cOH3/IF8MW"}
+              - column: {name: first_name, value: "John"}
+              - column: {name: last_name, value: "Doe"}
+        - insert:
+            tableName: users
+            columns:
+              - column: { name: email, value: "admin@example.com" }
+              - column: { name: password, value: "$2a$10$/kmAejMiCs5tvKBD8aITd.uwyt/Aww38FlRVuQQ93/.cOH3/IF8MW" }
+              - column: { name: first_name, value: "Alice" }
+              - column: { name: last_name, value: "Doe" }
