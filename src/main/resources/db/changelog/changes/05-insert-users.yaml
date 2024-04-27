@@ -17,3 +17,4 @@ databaseChangeLog:
               - column: { name: password, value: "$2a$10$/kmAejMiCs5tvKBD8aITd.uwyt/Aww38FlRVuQQ93/.cOH3/IF8MW" }
               - column: { name: first_name, value: "Alice" }
               - column: { name: last_name, value: "Doe" }
+#123456789

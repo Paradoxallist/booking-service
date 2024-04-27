@@ -1,7 +1,10 @@
 package bookingservice.service;
 
+import bookingservice.dto.UpdateUserRequestDto;
+import bookingservice.dto.UpdateUserRoleRequestDto;
 import bookingservice.dto.UserDto;
 import bookingservice.dto.UserRegistrationRequestDto;
+import bookingservice.exception.EntityNotFoundException;
 import bookingservice.exception.RegistrationException;
 import bookingservice.mapper.UserMapper;
 import bookingservice.model.Role;
@@ -32,13 +35,36 @@ public class UserServiceImpl implements UserService {
         User user = userMapper.toModel(requestDto);
         user.setPassword(passwordEncoder.encode(requestDto.getPassword()));
 
-        Set<Role> roles = new HashSet<>();
-        Role userRole = roleRepository.findByName(Role.RoleName.USER)
-                .orElseThrow(() -> new RuntimeException(
-                        "Default USER role not found. Please check the database."));
-        roles.add(userRole);
-        user.setRoles(roles);
+        user.setRoles(getRoles(Role.RoleName.USER));
 
         return userMapper.toDto(userRepository.save(user));
+    }
+
+    @Override
+    public UserDto getUserInfo(User principal) {
+        return userMapper.toDto(principal);
+    }
+
+    @Override
+    public UserDto updateUserInfo(UpdateUserRequestDto requestDto, User principal) {
+        userMapper.update(principal, requestDto);
+        return userMapper.toDto(userRepository.save(principal));
+    }
+
+    @Override
+    public UserDto updateUserRole(Long id, UpdateUserRoleRequestDto requestDto) {
+        User user = userRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("Can't find user by id: " + id));
+        user.setRoles(getRoles(Role.RoleName.valueOf(requestDto.getName())));
+        return userMapper.toDto(userRepository.save(user));
+    }
+
+    private Set<Role> getRoles(Role.RoleName name) {
+        Set<Role> roles = new HashSet<>();
+        Role userRole = roleRepository.findByName(name)
+                .orElseThrow(() -> new RuntimeException(name +
+                        " role not found. Please check the database."));
+        roles.add(userRole);
+        return roles;
     }
 }
