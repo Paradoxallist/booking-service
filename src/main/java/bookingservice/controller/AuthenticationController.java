@@ -1,11 +1,11 @@
 package bookingservice.controller;
 
-import bookingservice.dto.UserDto;
-import bookingservice.dto.UserLoginRequestDto;
-import bookingservice.dto.UserLoginResponseDto;
-import bookingservice.dto.UserRegistrationRequestDto;
+import bookingservice.dto.user.UserDto;
+import bookingservice.dto.user.UserLoginRequestDto;
+import bookingservice.dto.user.UserLoginResponseDto;
+import bookingservice.dto.user.UserRegistrationRequestDto;
 import bookingservice.security.AuthenticationService;
-import bookingservice.service.UserService;
+import bookingservice.service.user.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
