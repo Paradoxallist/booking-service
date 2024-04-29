@@ -1,4 +1,4 @@
-package bookingservice.dto;
+package bookingservice.dto.user;
 
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package bookingservice.dto;
+package bookingservice.dto.user;
 
 import lombok.Data;
 

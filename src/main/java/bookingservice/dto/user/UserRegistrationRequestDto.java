@@ -1,4 +1,4 @@
-package bookingservice.dto;
+package bookingservice.dto.user;
 
 import bookingservice.validation.FieldMatch;
 import jakarta.validation.constraints.Email;

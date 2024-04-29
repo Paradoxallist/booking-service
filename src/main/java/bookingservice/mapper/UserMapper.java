@@ -1,9 +1,9 @@
 package bookingservice.mapper;
 
 import bookingservice.config.MapperConfig;
-import bookingservice.dto.UpdateUserRequestDto;
-import bookingservice.dto.UserDto;
-import bookingservice.dto.UserRegistrationRequestDto;
+import bookingservice.dto.user.UpdateUserRequestDto;
+import bookingservice.dto.user.UserDto;
+import bookingservice.dto.user.UserRegistrationRequestDto;
 import bookingservice.model.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;

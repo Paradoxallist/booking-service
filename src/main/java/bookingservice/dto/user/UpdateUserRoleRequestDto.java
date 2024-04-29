@@ -1,4 +1,4 @@
-package bookingservice.dto;
+package bookingservice.dto.user;
 
 import bookingservice.model.Role;
 import bookingservice.validation.ValueOfEnum;

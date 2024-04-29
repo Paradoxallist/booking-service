@@ -1,9 +1,9 @@
-package bookingservice.service;
+package bookingservice.service.user;
 
-import bookingservice.dto.UpdateUserRequestDto;
-import bookingservice.dto.UpdateUserRoleRequestDto;
-import bookingservice.dto.UserDto;
-import bookingservice.dto.UserRegistrationRequestDto;
+import bookingservice.dto.user.UpdateUserRequestDto;
+import bookingservice.dto.user.UpdateUserRoleRequestDto;
+import bookingservice.dto.user.UserDto;
+import bookingservice.dto.user.UserRegistrationRequestDto;
 import bookingservice.exception.EntityNotFoundException;
 import bookingservice.exception.RegistrationException;
 import bookingservice.mapper.UserMapper;
@@ -52,6 +52,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public UserDto updateUserRole(Long id, UpdateUserRoleRequestDto requestDto) {
         User user = userRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("Can't find user by id: " + id));
