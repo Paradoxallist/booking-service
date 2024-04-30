@@ -2,8 +2,6 @@ package bookingservice.controller;
 
 import bookingservice.dto.accommodations.AccommodationDto;
 import bookingservice.dto.accommodations.CreateAccommodationRequestDto;
-import bookingservice.dto.accommodations.UpdateAccommodationRequestDto;
-import bookingservice.dto.user.UpdateUserRoleRequestDto;
 import bookingservice.model.User;
 import bookingservice.service.accommodations.AccommodationService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -25,44 +23,51 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "Accommodation management", description = "Endpoints for managing accommodation inventory")
+@Tag(name = "Accommodation management",
+        description = "Endpoints for managing accommodation inventory")
 @RestController
 @RequestMapping("/accommodations")
 @RequiredArgsConstructor
 public class AccommodationController {
-    private AccommodationService accommodationService;
+    private final AccommodationService accommodationService;
 
     @GetMapping
-    @Operation(summary = "Get all accommodations", description = "Provides a list of available accommodations")
+    @Operation(summary = "Get all accommodations",
+            description = "Provides a list of available accommodations")
     public List<AccommodationDto> getAll(Pageable pageable) {
         return accommodationService.findAll(pageable);
     }
 
     @GetMapping("/{id}")
-    @Operation(summary = "Get the accommodations by id", description = "Retrieves detailed information about a specific accommodation")
+    @Operation(summary = "Get the accommodations by id",
+            description = "Retrieves detailed information about a specific accommodation")
     public AccommodationDto getById(@PathVariable("id") Long id) {
         return accommodationService.getById(id);
     }
 
     @PutMapping("/{id}")
     @PatchMapping("/{id}")
-    @Operation(summary = "Update accommodation by id", description = "Allows updates to accommodation details, including inventory management")
+    @Operation(summary = "Update accommodation by id",
+            description = "Allows updates to accommodation details, including inventory management")
     public AccommodationDto updateAccommodation(Authentication authentication,
                                   @PathVariable("id") Long id,
-                                  @RequestBody @Valid UpdateAccommodationRequestDto requestDto) {
+                                  @RequestBody @Valid CreateAccommodationRequestDto requestDto) {
         return accommodationService.update((User) authentication.getPrincipal(),id, requestDto);
     }
 
     @PostMapping
-    @Operation(summary = "Create a new accommodations", description = "Create a new accommodations")
-    public AccommodationDto createAccommodation(Authentication authentication,
-                                       @RequestBody @Valid CreateAccommodationRequestDto requestDto) {
+    @Operation(summary = "Create a new accommodations",
+            description = "Create a new accommodations")
+    public AccommodationDto createAccommodation(
+            Authentication authentication,
+            @RequestBody @Valid CreateAccommodationRequestDto requestDto) {
         return accommodationService.save((User) authentication.getPrincipal(),requestDto);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @Operation(summary = "Delete the accommodation by id", description = "Delete the accommodation by id")
+    @Operation(summary = "Delete the accommodation by id",
+            description = "Delete the accommodation by id")
     public void deleteById(Authentication authentication,
                            @PathVariable("id") Long id) {
         accommodationService.delete((User) authentication.getPrincipal(), id);

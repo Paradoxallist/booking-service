@@ -63,8 +63,8 @@ public class UserServiceImpl implements UserService {
     private Set<Role> getRoles(Role.RoleName name) {
         Set<Role> roles = new HashSet<>();
         Role userRole = roleRepository.findByName(name)
-                .orElseThrow(() -> new RuntimeException(name +
-                        " role not found. Please check the database."));
+                .orElseThrow(() -> new RuntimeException(name
+                        + " role not found. Please check the database."));
         roles.add(userRole);
         return roles;
     }

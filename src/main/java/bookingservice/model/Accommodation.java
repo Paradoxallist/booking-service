@@ -47,7 +47,7 @@ public class Accommodation {
     private int availability;
 
     @ManyToOne
-    @JoinColumn(name = "owner", nullable = false)
+    @JoinColumn(name = "owner_id", nullable = false)
     private User owner;
 
     @Column(name = "is_deleted", nullable = false)

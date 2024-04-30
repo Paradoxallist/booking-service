@@ -7,6 +7,7 @@ import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
+
 @Constraint(validatedBy = ValueOfEnumValidator.class)
 @Target({FIELD})
 @Retention(RUNTIME)

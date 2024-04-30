@@ -3,10 +3,7 @@ package bookingservice.mapper;
 import bookingservice.config.MapperConfig;
 import bookingservice.dto.accommodations.AccommodationDto;
 import bookingservice.dto.accommodations.CreateAccommodationRequestDto;
-import bookingservice.dto.accommodations.UpdateAccommodationRequestDto;
-import bookingservice.dto.user.UpdateUserRequestDto;
 import bookingservice.model.Accommodation;
-import bookingservice.model.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 
@@ -16,5 +13,6 @@ public interface AccommodationMapper {
 
     Accommodation toModel(CreateAccommodationRequestDto requestDto);
 
-    void update(@MappingTarget Accommodation accommodation, UpdateAccommodationRequestDto requestDto);
+    void update(@MappingTarget Accommodation accommodation,
+                CreateAccommodationRequestDto requestDto);
 }

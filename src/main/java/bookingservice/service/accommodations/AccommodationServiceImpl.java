@@ -2,7 +2,6 @@ package bookingservice.service.accommodations;
 
 import bookingservice.dto.accommodations.AccommodationDto;
 import bookingservice.dto.accommodations.CreateAccommodationRequestDto;
-import bookingservice.dto.accommodations.UpdateAccommodationRequestDto;
 import bookingservice.exception.AccessLevelException;
 import bookingservice.exception.EntityNotFoundException;
 import bookingservice.mapper.AccommodationMapper;
@@ -51,7 +50,9 @@ public class AccommodationServiceImpl implements AccommodationService {
             if (accommodation.getOwner().getEmail().equals(principal.getEmail())) {
                 accommodationRepository.deleteById(id);
             } else {
-                throw new AccessLevelException("User : " + principal.getEmail() + " don't have access to accommodation with id: " + id);
+                throw new AccessLevelException("User : "
+                        + principal.getEmail()
+                        + " don't have access to accommodation with id: " + id);
             }
         }
     }
@@ -65,7 +66,9 @@ public class AccommodationServiceImpl implements AccommodationService {
 
     @Override
     @Transactional
-    public AccommodationDto update(User principal, Long id, UpdateAccommodationRequestDto requestDto) {
+    public AccommodationDto update(User principal,
+                                   Long id,
+                                   CreateAccommodationRequestDto requestDto) {
         Accommodation accommodation = accommodationRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("Can't find accommodation with id: " + id)
         );
@@ -77,8 +80,11 @@ public class AccommodationServiceImpl implements AccommodationService {
             if (accommodation.getOwner().getEmail().equals(principal.getEmail())) {
                 return accommodationMapper.toDto(accommodationRepository.save(accommodation));
             } else {
-                throw new AccessLevelException("User : " + principal.getEmail() + " don't have access to accommodation with id: " + id);
+                throw new AccessLevelException("User : "
+                        + principal.getEmail()
+                        + " don't have access to accommodation with id: " + id);
             }
         }
     }
 }
+

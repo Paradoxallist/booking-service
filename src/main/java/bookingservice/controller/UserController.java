@@ -27,14 +27,16 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/me")
-    @Operation(summary = "Get user info", description = "Get profile information for the currently logged-in user")
+    @Operation(summary = "Get user info",
+            description = "Get profile information for the currently logged-in user")
     public UserDto getUserInfo(Authentication authentication) {
         return userService.getUserInfo((User) authentication.getPrincipal());
     }
 
     @PatchMapping("/me")
     @PutMapping("/me")
-    @Operation(summary = "Update user info", description = "User update their profile information")
+    @Operation(summary = "Update user info",
+            description = "User update their profile information")
     public UserDto updateUser(Authentication authentication,
                               @RequestBody @Valid UpdateUserRequestDto requestDto) {
         return userService.updateUserInfo(requestDto, (User) authentication.getPrincipal());
@@ -42,7 +44,8 @@ public class UserController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/{id}/role")
-    @Operation(summary = "Update user role", description = "Update user role by id")
+    @Operation(summary = "Update user role",
+            description = "Update user role by id")
     public UserDto updateUserRole(@PathVariable("id") Long id,
                               @RequestBody @Valid UpdateUserRoleRequestDto requestDto) {
         return userService.updateUserRole(id, requestDto);
