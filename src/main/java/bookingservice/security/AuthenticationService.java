@@ -1,7 +1,7 @@
 package bookingservice.security;
 
-import bookingservice.dto.UserLoginRequestDto;
-import bookingservice.dto.UserLoginResponseDto;
+import bookingservice.dto.user.UserLoginRequestDto;
+import bookingservice.dto.user.UserLoginResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
