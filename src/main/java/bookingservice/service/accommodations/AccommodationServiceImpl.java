@@ -41,19 +41,10 @@ public class AccommodationServiceImpl implements AccommodationService {
     @Transactional
     public void delete(User principal, Long id) {
         Accommodation accommodation = accommodationRepository.findById(id).orElseThrow(
-                () -> new EntityNotFoundException("Can't find accommodation with id: " + id)
-        );
+                () -> new EntityNotFoundException("Can't find accommodation with id: " + id));
 
-        if (principal.getRoles().stream().anyMatch(role -> role.getName() == Role.RoleName.ADMIN)) {
+        if (getAccess(principal, accommodation)) {
             accommodationRepository.deleteById(id);
-        } else {
-            if (accommodation.getOwner().getEmail().equals(principal.getEmail())) {
-                accommodationRepository.deleteById(id);
-            } else {
-                throw new AccessLevelException("User : "
-                        + principal.getEmail()
-                        + " don't have access to accommodation with id: " + id);
-            }
         }
     }
 
@@ -70,21 +61,26 @@ public class AccommodationServiceImpl implements AccommodationService {
                                    Long id,
                                    CreateAccommodationRequestDto requestDto) {
         Accommodation accommodation = accommodationRepository.findById(id).orElseThrow(
-                () -> new EntityNotFoundException("Can't find accommodation with id: " + id)
-        );
-        accommodationMapper.update(accommodation, requestDto);
+                () -> new EntityNotFoundException("Can't find accommodation with id: " + id));
 
-        if (principal.getRoles().stream().anyMatch(role -> role.getName() == Role.RoleName.ADMIN)) {
+        if (getAccess(principal, accommodation)) {
+            accommodationMapper.update(accommodation, requestDto);
             return accommodationMapper.toDto(accommodationRepository.save(accommodation));
-        } else {
-            if (accommodation.getOwner().getEmail().equals(principal.getEmail())) {
-                return accommodationMapper.toDto(accommodationRepository.save(accommodation));
-            } else {
-                throw new AccessLevelException("User : "
-                        + principal.getEmail()
-                        + " don't have access to accommodation with id: " + id);
-            }
         }
+        return null;
+    }
+
+    private boolean getAccess(User principal, Accommodation accommodation) {
+        boolean access =
+                principal.getRoles().stream()
+                        .anyMatch(role -> role.getName() == Role.RoleName.ADMIN)
+                || accommodation.getOwner().getEmail().equals(principal.getEmail());
+        if (!access) {
+            throw new AccessLevelException("User : "
+                    + principal.getEmail()
+                    + " don't have access to accommodation with id: " + accommodation.getId());
+        }
+        return true;
     }
 }
 
