@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class AccommodationDto {
     private Long id;
-    private Accommodation.TypeAccommodation typeAccommodation;
+    private Accommodation.Type type;
     private String location;
     private String size;
     private String amenities;

@@ -29,7 +29,7 @@ public class Accommodation {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private TypeAccommodation typeAccommodation;
+    private Type type;
 
     @Column(name = "location", nullable = false)
     private String location;
@@ -53,7 +53,7 @@ public class Accommodation {
     @Column(name = "is_deleted", nullable = false)
     private boolean isDeleted = false;
 
-    public enum TypeAccommodation {
+    public enum Type {
         HOUSE, APARTMENT, CONDO, VACATION_HOME
     }
 }

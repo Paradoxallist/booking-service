@@ -26,26 +26,26 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
     private final UserService userService;
 
-    @GetMapping("/me")
     @Operation(summary = "Get user info",
             description = "Get profile information for the currently logged-in user")
+    @GetMapping("/me")
     public UserDto getUserInfo(Authentication authentication) {
         return userService.getUserInfo((User) authentication.getPrincipal());
     }
 
-    @PatchMapping("/me")
-    @PutMapping("/me")
     @Operation(summary = "Update user info",
             description = "User update their profile information")
+    @PatchMapping("/me")
+    @PutMapping("/me")
     public UserDto updateUser(Authentication authentication,
                               @RequestBody @Valid UpdateUserRequestDto requestDto) {
         return userService.updateUserInfo(requestDto, (User) authentication.getPrincipal());
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @PutMapping("/{id}/role")
     @Operation(summary = "Update user role",
             description = "Update user role by id")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @PutMapping("/{id}/role")
     public UserDto updateUserRole(@PathVariable("id") Long id,
                               @RequestBody @Valid UpdateUserRoleRequestDto requestDto) {
         return userService.updateUserRole(id, requestDto);
