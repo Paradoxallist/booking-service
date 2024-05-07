@@ -50,15 +50,16 @@ public class AccommodationController {
     public AccommodationDto updateAccommodation(Authentication authentication,
                                   @PathVariable("id") Long id,
                                   @RequestBody @Valid CreateAccommodationRequestDto requestDto) {
-        return accommodationService.update((User) authentication.getPrincipal(),id, requestDto);
+        return accommodationService.update(getUser(authentication),id, requestDto);
     }
 
     @Operation(summary = "Create a new accommodations")
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public AccommodationDto createAccommodation(
             Authentication authentication,
             @RequestBody @Valid CreateAccommodationRequestDto requestDto) {
-        return accommodationService.save((User) authentication.getPrincipal(),requestDto);
+        return accommodationService.save(getUser(authentication),requestDto);
     }
 
     @Operation(summary = "Delete the accommodation by id")
@@ -66,6 +67,10 @@ public class AccommodationController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteById(Authentication authentication,
                            @PathVariable("id") Long id) {
-        accommodationService.delete((User) authentication.getPrincipal(), id);
+        accommodationService.delete(getUser(authentication), id);
+    }
+
+    private User getUser(Authentication authentication) {
+        return (User) authentication.getPrincipal();
     }
 }

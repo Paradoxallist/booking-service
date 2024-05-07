@@ -73,7 +73,7 @@ public class AccommodationServiceImpl implements AccommodationService {
     private boolean getAccess(User principal, Accommodation accommodation) {
         boolean access =
                 principal.getRoles().stream()
-                        .anyMatch(role -> role.getName() == Role.RoleName.ADMIN)
+                        .anyMatch(role -> role.getName() == Role.RoleName.ROLE_MANAGER)
                 || accommodation.getOwner().getEmail().equals(principal.getEmail());
         if (!access) {
             throw new AccessLevelException("User : "
