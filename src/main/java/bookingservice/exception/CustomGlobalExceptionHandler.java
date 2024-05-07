@@ -43,6 +43,7 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
             {
                     RegistrationException.class,
                     EntityNotFoundException.class,
+                    DateValidationException.class
             }
     )
     public ResponseEntity<Object> handleRegistrationException(
