@@ -65,9 +65,9 @@ public class NotificationServiceImpl implements NotificationService {
 
     }
 
-    private String formatDate(LocalDate CheckInDate, LocalDate CheckOutDate) {
-        String formattedCheckInDate = CheckInDate.format(formatter);
-        String formattedCheckOutDate = CheckOutDate.format(formatter);
+    private String formatDate(LocalDate checkInDate, LocalDate checkOutDate) {
+        String formattedCheckInDate = checkInDate.format(formatter);
+        String formattedCheckOutDate = checkOutDate.format(formatter);
         return """
                 Your booking day and time is : %s,
                 you should leave accommodation on %s.

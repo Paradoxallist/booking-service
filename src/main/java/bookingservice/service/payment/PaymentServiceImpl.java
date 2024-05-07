@@ -7,7 +7,6 @@ import bookingservice.mapper.PaymentMapper;
 import bookingservice.model.Accommodation;
 import bookingservice.model.Booking;
 import bookingservice.model.Payment;
-import bookingservice.model.User;
 import bookingservice.repository.BookingRepository;
 import bookingservice.repository.PaymentRepository;
 import bookingservice.service.telegram.NotificationService;
@@ -16,7 +15,9 @@ import com.stripe.exception.StripeException;
 import com.stripe.model.checkout.Session;
 import com.stripe.param.checkout.SessionCreateParams;
 import jakarta.annotation.PostConstruct;
+import java.math.BigDecimal;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -26,9 +27,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.math.BigDecimal;
-import java.net.URL;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -51,7 +49,7 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public List<PaymentResponseDto> getUserPayments (Long userId, Pageable pageable) {
+    public List<PaymentResponseDto> getUserPayments(Long userId, Pageable pageable) {
         return paymentRepository.findAllByBookingUserId(userId, pageable).stream()
                 .map(paymentMapper::toDto)
                 .toList();

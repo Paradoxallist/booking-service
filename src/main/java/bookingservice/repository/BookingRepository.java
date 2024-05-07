@@ -1,6 +1,5 @@
 package bookingservice.repository;
 
-import bookingservice.model.Accommodation;
 import bookingservice.model.Booking;
 import java.time.LocalDate;
 import java.util.List;
@@ -18,11 +17,11 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     Optional<Booking> findBookingByStatusAndUserId(Booking.Status status, Long userId);
 
-    @Query("SELECT COUNT(b) > 0 FROM Booking b " +
-            "WHERE (b.checkInDate BETWEEN :checkInDate AND :checkOutDate " +
-            "OR b.checkOutDate BETWEEN :checkInDate AND :checkOutDate) " +
-            "AND b.status IN ('PENDING', 'CONFIRMED') " +
-            "AND b.accommodation.id = :accommodationId")
+    @Query("SELECT COUNT(b) > 0 FROM Booking b "
+            + "WHERE (b.checkInDate BETWEEN :checkInDate AND :checkOutDate "
+            + "OR b.checkOutDate BETWEEN :checkInDate AND :checkOutDate) "
+            + "AND b.status IN ('PENDING', 'CONFIRMED') "
+            + "AND b.accommodation.id = :accommodationId")
     boolean existsBookingForPeriodAndStatusAndAccommodation(
             @Param("checkInDate") LocalDate checkInDate,
             @Param("checkOutDate") LocalDate checkOutDate,

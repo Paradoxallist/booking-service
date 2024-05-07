@@ -3,7 +3,6 @@ package bookingservice.service.telegram;
 import bookingservice.model.Accommodation;
 import bookingservice.model.Booking;
 import bookingservice.model.Payment;
-import java.util.Set;
 
 public interface NotificationService {
 
@@ -14,4 +13,3 @@ public interface NotificationService {
     void sendMessageAboutCanceledPayment(Payment payment, Accommodation accommodation);
 
 }
-
