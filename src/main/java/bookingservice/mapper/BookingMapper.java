@@ -9,6 +9,7 @@ import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.Named;
 
 @Mapper(config = MapperConfig.class, uses = {UserMapper.class, AccommodationMapper.class})
 public interface BookingMapper {
@@ -26,4 +27,9 @@ public interface BookingMapper {
 
     void update(@MappingTarget Booking booking,
                 UpdateBookingRequestDto requestDto);
+
+    @Named("idByBooking")
+    default Long idByBooking(Booking booking) {
+        return booking.getId();
+    }
 }

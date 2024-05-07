@@ -33,8 +33,8 @@ public class BookingController {
     private final BookingService bookingService;
 
     @Operation(summary = "Search for bookings",
-            description = "Searching bookings by some parameters")
-    @PreAuthorize("hasAuthority('ADMIN')")
+            description = "Searching bookings by some parameters + Allowed for managers only")
+    @PreAuthorize("hasAuthority('MANAGER')")
     @GetMapping
     public List<BookingDto> search(BookingSearchUserRequestDto requestDto) {
         return bookingService.search(requestDto);
@@ -44,14 +44,15 @@ public class BookingController {
     @Operation(summary = "Get user's booking",
             description = "Provides a list of user's booking")
     public List<BookingDto> getMyBooking(Authentication authentication) {
-        return bookingService.getUserBooking((User) authentication.getPrincipal());
+        return bookingService.getUserBooking(getUser(authentication));
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Get the booking by id",
             description = "Retrieves detailed information about a specific booking")
-    public BookingDto getById(@PathVariable("id") Long id) {
-        return bookingService.getById(id);
+    public BookingDto getById(Authentication authentication,
+                              @PathVariable("id") Long id) {
+        return bookingService.getById(getUser(authentication), id);
     }
 
     @PutMapping("/{id}")
@@ -62,17 +63,18 @@ public class BookingController {
                                                 @RequestBody @Valid UpdateBookingRequestDto requestDto
     ) {
         return bookingService.update(
-                (User) authentication.getPrincipal(),
+                getUser(authentication),
                 bookingId,
                 requestDto);
     }
 
     @PostMapping
-    @Operation(summary = "Create a new booking")
+    @ResponseStatus(HttpStatus.CREATED)
+    @Operation(summary = "Create a new booking", description = "Endpoint for creating a new booking")
     public BookingDto createBooking(
             Authentication authentication,
             @RequestBody @Valid CreateBookingRequestDto requestDto) {
-        return bookingService.save((User) authentication.getPrincipal(),requestDto);
+        return bookingService.save(getUser(authentication), requestDto);
     }
 
     @DeleteMapping("/{id}")
@@ -80,6 +82,10 @@ public class BookingController {
     @Operation(summary = "Delete the booking by id")
     public void deleteById(Authentication authentication,
                            @PathVariable("id") Long id) {
-        bookingService.delete((User) authentication.getPrincipal(), id);
+        bookingService.delete(getUser(authentication), id);
+    }
+
+    private User getUser(Authentication authentication) {
+        return (User) authentication.getPrincipal();
     }
 }
