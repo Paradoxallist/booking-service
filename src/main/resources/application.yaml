@@ -17,7 +17,13 @@ spring:
 server:
   servlet:
     context-path: /api
-  port: 8082
+  port: 8080
 jwt:
   expiration: 123456789
   secret: ultraMegaSuperSecretStringForJwtToken
+stripe:
+  apiKey: sk_test_51PCKlqKnPqS6grSc3nIePsayOwH0Y5oBXCymXhSCrLpQmBfGR3g9WHZ2jIqZ2T4ft6ahPxKmJTDnSADzM6v6LYOH00vU8QYFMU
+bot:
+  name: booking44test_bot
+  token: 7079112443:AAHInnrHsIe8IdiFSc1tak_Iiey8xWIT2Aw
+  chat: -1234567890
