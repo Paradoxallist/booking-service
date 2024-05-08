@@ -61,6 +61,9 @@ public class BookingServiceImpl implements BookingService {
         Booking booking =
                 bookingRepository.findById(bookingId).orElseThrow(
                     () -> new EntityNotFoundException("Can't find booking with id: " + bookingId));
+        if (!booking.getStatus().equals(Booking.Status.PENDING)) {
+            throw new EntityNotFoundException("Can't update this booking with id: " + bookingId);
+        }
         isValid(requestDto.getCheckInDate(), requestDto.getCheckOutDate(), booking.getAccommodation().getId());
         if (getAccess(principal, booking)) {
             bookingMapper.update(booking, requestDto);
@@ -72,11 +75,12 @@ public class BookingServiceImpl implements BookingService {
     @Override
     @Transactional
     public BookingDto save(User principal, CreateBookingRequestDto requestDto) {
-        Accommodation accommodation =
+        final Accommodation accommodation =
                 accommodationRepository.findById(requestDto.getAccommodationId()).orElseThrow(
                     () -> new EntityNotFoundException("Can't find accommodation with id: " + requestDto.getAccommodationId()));
         isValid(requestDto.getCheckInDate(), requestDto.getCheckOutDate(), requestDto.getAccommodationId());
         Booking newBooking = bookingMapper.toModel(requestDto);
+        newBooking.setStatus(Booking.Status.PENDING);
         newBooking.setUser(principal);
         newBooking.setAccommodation(accommodation);
         notificationService.sendMessageAboutCreatedBooking(newBooking);
