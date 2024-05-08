@@ -2,11 +2,14 @@ package bookingservice.service.payment;
 
 import bookingservice.dto.payment.CreatePaymentRequestDto;
 import bookingservice.dto.payment.PaymentResponseDto;
+import bookingservice.exception.AccessLevelException;
 import bookingservice.exception.EntityNotFoundException;
 import bookingservice.mapper.PaymentMapper;
 import bookingservice.model.Accommodation;
 import bookingservice.model.Booking;
 import bookingservice.model.Payment;
+import bookingservice.model.Role;
+import bookingservice.model.User;
 import bookingservice.repository.BookingRepository;
 import bookingservice.repository.PaymentRepository;
 import bookingservice.service.telegram.NotificationService;
@@ -57,7 +60,13 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     @Transactional
-    public PaymentResponseDto createPaymentSession(CreatePaymentRequestDto request) {
+    public PaymentResponseDto createPaymentSession(User user, CreatePaymentRequestDto request) {
+        Booking booking = bookingRepository
+                .findById(request.getBookingId())
+                .orElseThrow(() -> new EntityNotFoundException("Can't find booking by id "
+                        + request.getBookingId()));
+        getAccess(user, booking);
+
         Optional<Payment> paymentFromDb = paymentRepository.findAllByBookingId(request.getBookingId())
                 .stream()
                 .filter(p -> p.getStatus() != Payment.Status.CANCELED)
@@ -74,10 +83,6 @@ public class PaymentServiceImpl implements PaymentService {
         }
 
         Payment payment = new Payment();
-        Booking booking = bookingRepository
-                .findById(request.getBookingId())
-                .orElseThrow(() -> new EntityNotFoundException("Can't find booking by id "
-                        + request.getBookingId()));
         payment.setBooking(booking);
 
         Accommodation accommodation = booking.getAccommodation();
@@ -128,9 +133,10 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Transactional
     @Override
-    public PaymentResponseDto getSuccessfulPayment(String sessionId) {
-        Payment payment = paymentRepository.findBySessionId(sessionId)
-                .orElseThrow(() -> new RuntimeException("Cannot find session by id " + sessionId));
+    public PaymentResponseDto getSuccessfulPayment(User user, Long paymentId) {
+        Payment payment = paymentRepository.findById(paymentId)
+                .orElseThrow(() -> new RuntimeException("Cannot find payment by id " + paymentId));
+        getAccess(user, payment.getBooking());
         payment.setStatus(Payment.Status.PAID);
         payment.getBooking().setStatus(Booking.Status.CONFIRMED);
         notificationService.sendMessageAboutSuccessPayment(payment, payment.getBooking().getAccommodation());
@@ -139,12 +145,26 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     @Transactional
-    public PaymentResponseDto getCancelledPayment(String sessionId) {
-        Payment payment = paymentRepository.findBySessionId(sessionId)
-                .orElseThrow(() -> new RuntimeException("Cannot find session by id " + sessionId));
+    public PaymentResponseDto getCancelledPayment(User user, Long paymentId) {
+        Payment payment = paymentRepository.findById(paymentId)
+                .orElseThrow(() -> new RuntimeException("Cannot find payment by id " + paymentId));
+        getAccess(user, payment.getBooking());
         payment.setStatus(Payment.Status.CANCELED);
         payment.getBooking().setStatus(Booking.Status.CANCELED);
         notificationService.sendMessageAboutCanceledPayment(payment, payment.getBooking().getAccommodation());
         return paymentMapper.toDto(paymentRepository.save(payment));
     }
+
+    private void getAccess(User principal, Booking booking) {
+        boolean access =
+                principal.getRoles()
+                        .stream().anyMatch(role -> role.getName() == Role.RoleName.ROLE_MANAGER)
+                        || booking.getUser().getEmail().equals(principal.getEmail());
+        if (!access) {
+            throw new AccessLevelException("User : "
+                    + principal.getEmail()
+                    + " don't have access to booking with id: " + booking.getId());
+        }
+    }
+
 }

@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,22 +31,25 @@ public class PaymentController {
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Create a payment",
             description = "Endpoint for creating a payment for a pending booking")
-    public PaymentResponseDto create(CreatePaymentRequestDto requestDto) {
-        return paymentService.createPaymentSession(requestDto);
+    public PaymentResponseDto create(Authentication authentication,
+                                     CreatePaymentRequestDto requestDto) {
+        return paymentService.createPaymentSession(getUser(authentication), requestDto);
     }
 
-    @GetMapping("/success")
+    @GetMapping("/success/{paymentId}")
     @Operation(summary = "Redirection after a successful payment",
             description = "Endpoint for redirection after the successful payment")
-    public PaymentResponseDto success(String sessionId) {
-        return paymentService.getSuccessfulPayment(sessionId);
+    public PaymentResponseDto success(Authentication authentication,
+                                      @PathVariable("paymentId") Long paymentId) {
+        return paymentService.getSuccessfulPayment(getUser(authentication), paymentId);
     }
 
-    @GetMapping("/cancel")
+    @GetMapping("/cancel/{paymentId}")
     @Operation(summary = "Redirection after a cancelled payment",
             description = "Endpoint for redirection after the cancelled payment")
-    public PaymentResponseDto cancel(String sessionId) {
-        return paymentService.getCancelledPayment(sessionId);
+    public PaymentResponseDto cancel(Authentication authentication,
+                                     @PathVariable("paymentId") Long paymentId) {
+        return paymentService.getCancelledPayment(getUser(authentication), paymentId);
     }
 
     @GetMapping("/me")
